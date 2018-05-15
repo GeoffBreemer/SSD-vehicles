@@ -1,4 +1,8 @@
-"""Convert the dlib vehicle database to TensorFlow records"""
+"""Convert the dlib vehicle database to TensorFlow records
+
+More information: https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/using_your_own_dataset.md
+TFRecord information: https://www.tensorflow.org/api_guides/python/python_io#TFRecords_Format_Details
+"""
 import settings_ssd_vehicles as settings
 from dltoolkit.utils.tfod import TFDataPoint
 
@@ -57,12 +61,12 @@ def main(_):
             encoding = filename[filename.rfind(".") + 1:]
 
             # Create the data point
-            tfAnnot = TFDataPoint()
-            tfAnnot.image = encoded
-            tfAnnot.encoding = encoding
-            tfAnnot.filename = filename
-            tfAnnot.width = w
-            tfAnnot.height = h
+            tf_data_point = TFDataPoint()
+            tf_data_point.image = encoded
+            tf_data_point.encoding = encoding
+            tf_data_point.filename = filename
+            tf_data_point.width = w
+            tf_data_point.height = h
 
             # Loop over all bounding boxes associated with the image
             for box in image.find_all("box"):
@@ -90,18 +94,18 @@ def main(_):
                     continue
 
                 # Add the box to the data point
-                tfAnnot.xMins.append(xMin)
-                tfAnnot.xMaxs.append(xMax)
-                tfAnnot.yMins.append(yMin)
-                tfAnnot.yMaxs.append(yMax)
-                tfAnnot.classLabels.append(label.encode("utf8"))
-                tfAnnot.classes.append(settings.CLASSES[label])
-                tfAnnot.difficult.append(0)
+                tf_data_point.xMins.append(xMin)
+                tf_data_point.xMaxs.append(xMax)
+                tf_data_point.yMins.append(yMin)
+                tf_data_point.yMaxs.append(yMax)
+                tf_data_point.classLabels.append(label.encode("utf8"))
+                tf_data_point.classes.append(settings.CLASSES[label])
+                tf_data_point.difficult.append(0)
 
                 total += 1
 
             # Create the data point for the current image
-            features = tf.train.Features(feature=tfAnnot.create_data_point())
+            features = tf.train.Features(feature=tf_data_point.create_data_point())
             example = tf.train.Example(features=features)
             writer.write(example.SerializeToString())
 

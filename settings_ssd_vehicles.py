@@ -11,4 +11,4 @@ PATH_TRAIN_RECORD = os.path.sep.join([PATH_RECORDS, "training.record"])
 PATH_TEST_RECORD = os.path.sep.join([PATH_RECORDS, "testing.record"])
 PATH_LABEL_MAP = os.path.sep.join([PATH_RECORDS, "classes.pbtxt"])
 
-CLASSES = {"rear": 1, "front": 2}
+CLASSES = {"rear": 1, "front": 2}       # always start at 1
